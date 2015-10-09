@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Animals.Models.Animal>
+
+
+@{
+    ViewBag.Title = "Животные";
+}
+
+<h2>Животные</h2>
+
+       
+
+
+<p>
+    @Html.ActionLink("Create New", "Create", "Animal") |
+    @Html.ActionLink("Search", "Search", "Animal")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+        $(".btn").click(function (e) {
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').modal('show');
+        });
+        });
+    })
+    </script>
+
+
+    <div id="modDialog" class="modal fade">
+        <div id="dialogContent" class="modal-dialog"></div>
+    </div>
+ @* @foreach (Animals.Models.Region region in ViewBag.RegionID)
+    {
+        <p>
+
+            @Html.CheckBox("region", true)
+            @Html.Label(region.Name)
+
+
+        </p>
+
+    }
+*@
+
+    </p>
+    <table id="result_table" class="table">
+        <tr>
+            <th>
+                Имя
+            </th>
+            <th>
+                Вид
+            </th>
+            <th>
+                Раскраска
+            </th>
+            <th>
+                Место обитания
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Update", "Edit", new { id = item.Id }, new { @class = "btn" })|
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })   |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+    @*
+            навешиваем js обработчик на события(клики)
+
+        <script>
+            $(document).ready(function () {
+
+                $.ajaxSetup({ cache: false });
+
+                $(".viewDialog").on("click", function (e) {
+                    e.preventDefault();
+
+                    $("<div></div>")
+                        .addClass("dialog")
+                        .appendTo("body")
+                        .dialog({
+                            title: $(this).attr("data-dialog-title"),
+                            close: function () { $(this).remove() },
+                            modal: true
+                        })
+                        .load(this.href);
+                });
+                $(".close").on("click", function (e) {
+                    e.preventDefault();
+                    $(this).closest(".dialog").dialog("close");
+                });
+            });
+        </script>
+    *@
+

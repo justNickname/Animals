@@ -1,0 +1,131 @@
+﻿@{
+    Layout = null;
+}
+
+<html>
+
+<head>
+    <title>Поиск</title>
+    <script src='@Url.Content("~/Scripts/jquery-1.10.2.min.js")' type="text/javascript"></script>
+    <link href="~/content/jquery.jqgrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+    <link href="~/content/jquery.jqgrid/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
+    <script src='@Url.Content("~/Scripts/jquery.jqGrid.min.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/i18n/grid.locale-ru.js")' type="text/javascript"></script>
+    <style>
+
+        /*<title>jqGrid</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/i18n/grid.locale-ru.js" type="text/javascript"></script>
+    <style>*/
+        body {
+            background-color:#f0f0ffa;
+        }
+
+        .ui-jqgrid.ui-pg-input {
+            height: 20px;
+        }
+
+        .ui-jqgrid.ui-jqgrid-pager {
+            height: 50px;
+        }
+    </style>
+
+</head>
+<body>
+    <h2></h2>
+    <table id="jqg"></table>
+    <div id="jpager"></div>
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            var lastSel;
+            $("#jqg").jqGrid({
+                url:'@Url.Action("GetData")',
+                datatype: 'json',
+                mtype: 'POST',
+                jsonReader: {
+                    total: "total",
+                    page: "page",
+                    records: "records",
+                    root: "rows",
+                    //repeatitems: false,
+                    //Name: ""
+                },
+                colNames: ['Имя', 'Вид', 'Раскраска', 'Место обитания', 'Локация'],
+                colModel :[
+                { name: 'Name', index: 'Name', width: 100, stype: 'text', searchoptions:{sopt:['eq','ne','bw','cn']}},
+                { name: 'TypeName', index: 'Type.Name', width: 200, sortable: true, searchoptions:{sopt:['eq','ne','bw','cn']}},
+                { name: 'ColorName', index: 'Color.Name', width: 210, sortable: true, searchoptions:{sopt:['eq','ne','bw','cn']}},
+                { name: 'LocationName', index: 'Location.Name', width: 140, align: "center", sortable: true, searchoptions: { sopt: ['eq', 'ne', 'bw', 'cn'] } },
+                { name: 'LocationRegionName', index: 'Location.Region.Name', width: 150, align: "center", sortable: true, searchoptions:{sopt:['eq','ne','bw','cn']}}
+                ],
+                pager: '#jpager',
+                //rowNum:5,
+                //rowList:[5,10,30],
+                //sortname: 'Name',
+                //sortorder: "asc",
+                loadonce: true, // загрузка только один раз, все остальные манипуляции происходят на стороне клиента.
+                viewrecords: true,
+                //caption: "Животные",
+                onSelectRow: function (Name) {
+                    if (Name && Name !== lastSel) {
+                        $("#jqg").restoreRow(lastSel);
+                        lastSel = Name;
+                    }
+                    $("#jqg").editRow(Name, true);
+                },
+                //ondblClickRow: function (Name) {
+                //    if (Name && Name != lastSel) {
+                //        jQuery("#jqg").restoreRow(lastSel);
+                //        jQuery("#jqg").editRow(Name, true);
+                //        lastSel = Name;
+                //    }
+                //},
+                ////editurl: 'saverow'
+            }).navGrid('#jpager', { view: false, del: false, add: false, edit: false, search: true,
+            searchtext: "Поиск" },
+      {}, // default settings for edit
+      {}, // default settings for add
+      {}, // delete instead that del:false we need this
+      { closeOnEscape: true, multipleSearch: true, closeAfterSearch: true }, // search options
+      {} /* view parameters*/
+    );
+          //  $('#jqg').jqGrid('filterToolbar');
+    });
+
+@*$(document).ready(function () {
+    $("#jqg").jqGrid({
+        url: '@Url.Action("GetData")',
+        datatype: "json",
+        colNames: ['Имя', 'Вид', 'Раскраска', 'Место обитания', 'Локация'],
+        colModel: [
+        { name: 'Name', index: 'Name', width: 80, stype: 'text' },
+        { name: 'Type.Name', index: 'Type.Name', width: 190, sortable: true },
+        { name: 'Color.Name', index: 'Color.Name', width: 190, sortable: true },
+        { name: 'Location.Name', index: 'Location.Name', width: 150, sortable: false },
+        { name: 'Location.Region.Name', index: 'Location.Region.Name', width: 180, align: "right", sortable: true }
+        ],
+        rowNum: 10,
+        rowList: [10, 20, 30],
+        pager: '#jpager',
+        loadonce:true, // загрузка только один раз
+        sortname: 'Name', // сортировка по умолчанию по столбцу
+        sortorder: "desc", // порядок сортировки
+        caption: "The animals"
+    });
+    $("#jqg").jqGrid('filterToolbar', '#jpager', {
+
+        add: false,
+        del: false,
+        edit: false,
+        search: true,
+        searchtext: "Поиск",
+        refresh: true,
+        refreshtext: "Обновить"
+    });
+});*@
+</script> 
+</body>
