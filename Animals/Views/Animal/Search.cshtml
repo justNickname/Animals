@@ -96,36 +96,5 @@
           //  $('#jqg').jqGrid('filterToolbar');
     });
 
-@*$(document).ready(function () {
-    $("#jqg").jqGrid({
-        url: '@Url.Action("GetData")',
-        datatype: "json",
-        colNames: ['Имя', 'Вид', 'Раскраска', 'Место обитания', 'Локация'],
-        colModel: [
-        { name: 'Name', index: 'Name', width: 80, stype: 'text' },
-        { name: 'Type.Name', index: 'Type.Name', width: 190, sortable: true },
-        { name: 'Color.Name', index: 'Color.Name', width: 190, sortable: true },
-        { name: 'Location.Name', index: 'Location.Name', width: 150, sortable: false },
-        { name: 'Location.Region.Name', index: 'Location.Region.Name', width: 180, align: "right", sortable: true }
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: '#jpager',
-        loadonce:true, // загрузка только один раз
-        sortname: 'Name', // сортировка по умолчанию по столбцу
-        sortorder: "desc", // порядок сортировки
-        caption: "The animals"
-    });
-    $("#jqg").jqGrid('filterToolbar', '#jpager', {
-
-        add: false,
-        del: false,
-        edit: false,
-        search: true,
-        searchtext: "Поиск",
-        refresh: true,
-        refreshtext: "Обновить"
-    });
-});*@
 </script> 
 </body>
