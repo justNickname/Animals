@@ -14,6 +14,9 @@ namespace Animals.Models
         void AddingAnimal(Animal animal);
         void EditingAnimal(Animal animal);
         void DeletingAnimal(Animal animal);
-
+        IList<Color> GetColorsQuery();
+        IList<Location> GetLocationsQuery();
+        IList<Type> GetTypesQuery();
+        void GetDispose();
     }
 }

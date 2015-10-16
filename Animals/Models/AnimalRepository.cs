@@ -42,5 +42,34 @@ namespace Animals.Models
             _db.SaveChanges();
         }
 
+
+
+        public IList<Color> GetColorsQuery()
+        {
+           var Query = (from c in _db.Colors
+                           orderby c.Id
+                           select c).ToList<Color>(); 
+            return Query;
+        }
+
+        public IList<Location> GetLocationsQuery()
+        {
+            var Query = (from c in _db.Locations
+                         orderby c.Id
+                         select c).ToList<Location>();
+            return Query;
+        }
+
+        public IList<Type> GetTypesQuery()
+        {
+            var Query = (from c in _db.Types
+                         orderby c.Id
+                         select c).ToList<Animals.Models.Type>();   
+            return Query;
+        }
+       public void GetDispose()
+        {
+            _db.Dispose();
+        }
     }
 }

@@ -262,34 +262,24 @@ namespace Animals.Controllers
 
         //Немного магии - строим выпадающие списки из родительских таблиц
         //Данный метод не смог достаточно строго унифицировать, потому пришлось наплодить под каждый класс
-        private AnimalContext _db = new AnimalContext();
-        private void PopulateColorsDropDownList ( object selectedColor = null)
+        public void PopulateColorsDropDownList(object selectedColor = null)
         {
-            var colorsQuery = (from c in _db.Colors
-                               orderby c.Id
-                               select c).ToList<Color>();
-            ViewBag.ColorID = new SelectList(colorsQuery, "Id", "Name", selectedColor);
+            ViewBag.ColorID = new SelectList(_repository.GetColorsQuery(), "Id", "Name", selectedColor);
         }
         private void PopulateLocationDropDownList(object selectedLocation = null)
         {
-            var LocationQuery = (from c in _db.Locations
-                               orderby c.Id
-                               select c).ToList<Location>();
-            ViewBag.LocationID = new SelectList(LocationQuery, "Id", "Name", selectedLocation);
+            ViewBag.LocationID = new SelectList(_repository.GetLocationsQuery(), "Id", "Name", selectedLocation);
         }
         private void PopulateTypeDropDownList(object selectedType = null)
-        {
-            var TypesQuery = (from c in _db.Types
-                                 orderby c.Id
-                              select c).ToList<Animals.Models.Type>();                               //тащемта Type - имя системное, потому 
-            ViewBag.TypeID = new SelectList(TypesQuery, "Id", "Name", selectedType);                //в данном случае обозвал через полный 
-        }                                                                                          //путь пр-ва имен 
+        {                                                                                                    //тащемта Type - имя системное, потому 
+            ViewBag.TypeID = new SelectList(_repository.GetTypesQuery(), "Id", "Name", selectedType);       //в данном случае обозвал через полный 
+        }                                                                                                  //путь пр-ва имен 
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _db.Dispose();
+                _repository.GetDispose();
             }
             base.Dispose(disposing);
         }

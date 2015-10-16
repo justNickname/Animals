@@ -168,6 +168,7 @@
     </Compile>
     <Compile Include="Models\Animal.cs" />
     <Compile Include="Models\AnimalContext.cs" />
+    <Compile Include="Models\AnimalFakeRepository.cs" />
     <Compile Include="Models\AnimalRepository.cs" />
     <Compile Include="Models\Color.cs" />
     <Compile Include="Models\IAnimalRepository.cs" />
