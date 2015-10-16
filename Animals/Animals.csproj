@@ -168,7 +168,9 @@
     </Compile>
     <Compile Include="Models\Animal.cs" />
     <Compile Include="Models\AnimalContext.cs" />
+    <Compile Include="Models\AnimalRepository.cs" />
     <Compile Include="Models\Color.cs" />
+    <Compile Include="Models\IAnimalRepository.cs" />
     <Compile Include="Models\jqGridSupportClasses.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Region.cs" />

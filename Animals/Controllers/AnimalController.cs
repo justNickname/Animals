@@ -12,15 +12,17 @@ using System.Linq.Dynamic;
 
 namespace Animals.Controllers
 {
+    
     public class AnimalController : Controller
     {
-        private AnimalContext _db = new AnimalContext();
-        
+        private IAnimalRepository _repository;
+        public AnimalController() { _repository = new AnimalRepository(); }
+        public AnimalController(IAnimalRepository repository) { _repository = repository; }
         // GET: Animal
         public ActionResult Index()
         {
             
-            return View(_db.Animals.ToList());
+            return View(_repository.GetAnimals());
           
         }
         public ActionResult Search()
@@ -43,7 +45,7 @@ namespace Animals.Controllers
             {
                 var wc = si.GenerateWhereClause(typeof(Animal));
 
-                AnimalsHeap = _db.Animals.Where(wc.Clause, wc.FormatObjects);
+                AnimalsHeap = _repository.GetAnimalsHeap(wc.Clause, wc.FormatObjects);
 
                 totalRecords = AnimalsHeap.Count();
 
@@ -63,8 +65,8 @@ namespace Animals.Controllers
                 //    .OrderBy(si.sidx + " " + si.sord)
                 //    .Skip(skip)
                 //    .Take(si.rows);
-                var heap = _db.Animals.ToList();
-                int totalPagez = _db.Animals.Count();
+                var heap = _repository.GetAnimals();
+                int totalPagez = _repository.HowMuchAnimals();
                 var result = new JqGridSearchOut
                 {
                     total = totalPagez,
@@ -160,7 +162,7 @@ namespace Animals.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Animal animal = _db.Animals.Find(id);
+            Animal animal = _repository.FindById(id);
             if (animal == null)
             {
                 return HttpNotFound();
@@ -186,8 +188,7 @@ namespace Animals.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Animals.Add(animal);
-                _db.SaveChanges();
+                _repository.AddingAnimal(animal);
                 return RedirectToAction("Index");
             }
 
@@ -201,7 +202,7 @@ namespace Animals.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Animal animal = _db.Animals.Find(id);
+            Animal animal = _repository.FindById(id);
             if (animal == null)
             {
                 return HttpNotFound();
@@ -221,8 +222,7 @@ namespace Animals.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(animal).State = EntityState.Modified;
-                _db.SaveChanges();
+                _repository.EditingAnimal(animal);
                 return RedirectToAction("Index");
             }
             return View(animal);
@@ -235,7 +235,7 @@ namespace Animals.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Animal animal = _db.Animals.Find(id);
+            Animal animal = _repository.FindById(id);
             if (animal == null)
             {
                 return HttpNotFound();
@@ -248,20 +248,12 @@ namespace Animals.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Animal animal = _db.Animals.Find(id);
-            _db.Animals.Remove(animal);
-            _db.SaveChanges();
+            Animal animal = _repository.FindById(id);
+            _repository.DeletingAnimal(animal);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+   
         //public JsonResult IsNameWasTyped(string name)
         //{
         //        return Json(name.Length > 2, JsonRequestBehavior.AllowGet);
@@ -270,6 +262,7 @@ namespace Animals.Controllers
 
         //Немного магии - строим выпадающие списки из родительских таблиц
         //Данный метод не смог достаточно строго унифицировать, потому пришлось наплодить под каждый класс
+        private AnimalContext _db = new AnimalContext();
         private void PopulateColorsDropDownList ( object selectedColor = null)
         {
             var colorsQuery = (from c in _db.Colors
@@ -291,7 +284,15 @@ namespace Animals.Controllers
                               select c).ToList<Animals.Models.Type>();                               //тащемта Type - имя системное, потому 
             ViewBag.TypeID = new SelectList(TypesQuery, "Id", "Name", selectedType);                //в данном случае обозвал через полный 
         }                                                                                          //путь пр-ва имен 
-        
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
         
     }
 
